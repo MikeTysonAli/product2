@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Page</title>
+  <style>
+    /* Your existing CSS styles */
+    #product-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 20px;
+    }
+    .product-container {
+      width: calc(33% - 20px);
+      margin-bottom: 30px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .product-name { font-size: 1.5rem; font-weight: bold; margin: 15px 0; }
+    .rating { font-size: 1.2rem; color: #FFD700; }
+    .price-section { font-size: 1.2rem; margin: 15px 0; color: #333; }
+    .mrp { text-decoration: line-through; color: #888; }
+    .discount { font-size: 1.3rem; font-weight: bold; color: #28a745; margin-left: 10px; }
+    .product-carousel { position: relative; width: 100%; height: 300px; overflow: hidden; }
+    .carousel-images { display: flex; transition: transform 0.3s ease-in-out; }
+    .carousel-image { width: 100%; height: 100%; object-fit: cover; }
+    .arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: white; border: none; font-size: 2rem; padding: 10px; cursor: pointer; }
+    .left-arrow { left: 10px; }
+    .right-arrow { right: 10px; }
+    .buy-now-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .buy-now-btn:hover {
+      background-color: #218838;
+    }
+    #heading{
+        display:flex;
+        float:left;
+    }
+    #other-list{
+        display:none;
+    }
+    #hideProduct{
+        display:none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="product-list">
+      
+  </div>
+  <a onclick="view()" id="viewProducts">view more products</a>
+   <a onclick="hide()" id="hideProduct">hide products</a>
+  <div id="other-list"></div>
+  
+  <a href="https://socialsage.info/compare.html" style="text-decoration: none;">
+  <button id="compare-btn" class="compare-btn" style="
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      text-align: center;
+      display: inline-block;
+  " onmouseover="this.style.backgroundColor='#45a049'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 10px rgba(0, 0, 0, 0.15)';"
+  onmouseout="this.style.backgroundColor='#4CAF50'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px rgba(0, 0, 0, 0.1)';"
+  onfocus="this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(0, 150, 255, 0.5)';"
+  onblur="this.style.boxShadow='0 4px 6px rgba(0, 0, 0, 0.1)';"
+  onclick="this.style.backgroundColor='#388e3c'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.1)';">
+    Compare Selected Products
+  </button>
+</a>
+
+  <script>
+  
+  // Hardcoded data instead of fetching from server
+const products = [
+  {
+    name: "Cyxus Computer Blue Light Blocking Glasses, Anti Eyestrain UV Protection Clear Lens Eyeglasses for Men and Women",
+    rating: 4,
+    price: 2499,
+    discount: 48,
+    images: ["https://m.media-amazon.com/images/I/51Mo-OEjsPL._SL1500_.jpg", "https://m.media-amazon.com/images/I/8152on8812L._SL1500_.jpg", "https://m.media-amazon.com/images/I/81iSs4iOzDL._SL1500_.jpg"],
+    reviews: [
+      "Good product. Soothing for my eyes, can work longer on computer now.",
+      "I loved it. It is bigger than I thought and NO fashion at all, but is the best thing that I have bought here so far. Loved, Loved, Loved it. I just realised that my huge headache was because I was spending too much time in front of my screens without protection and this glasses works very well for me.",
+      "I was hesitant of buying the product because of some reviews but the glasses are really good and qualitative. I definitely recommend it."
+    ],
+    amazonLink: "https://amzn.to/4fBZVNA"
+  },
+  {
+    name: "Intellilens Navigator Blue Cut Computer Glasses for Eye Protection | Unisex, UV ProtectionZero Power, Anti Glare & Blue Light Filter Glasses",
+    rating: 4,
+    price: 2499,
+    discount: 81,
+    images: ["https://m.media-amazon.com/images/I/41CICCb8UrL._SX679_.jpg", "https://m.media-amazon.com/images/I/51se18uj53L._SX679_.jpg", "https://m.media-amazon.com/images/I/61TKtMZ5S4L._SX679_.jpg"],
+    reviews: [
+      "Wow, what a fantastic experience with Intellilens Glasses! They arrived 3 days early, and the packaging was impressive. The glasses themselves are top-notch - comfortable, stylish, and crystal-clear. Kudos to the team for exceptional customer service and attention to detail. Highly recommended!",
+      "As I expected it's a nice n comfortable spec's for everyone usage....but in my case little bit loose on my face bcoz of small face shape other than overall gud n nice...I have been using these specs for only two days, so the real test is still pending. I'll update the review after more use.",
+      "The glasses gave a lot of relief to the eyes."
+    ],
+    amazonLink: "https://amzn.to/4eLDsfC"
+  },
+  {
+    name: "WINTOO® Blue Cut Computer Glasses for Eye Protection | Zero Power Anti Glare Blue Light Blocking Filter Glasses | UV Protection Specs for Men & Women | TR90 Frames Blue Cut Lenses",
+    rating: 4,
+    price: 2499,
+    discount: 81,
+    images: ["https://m.media-amazon.com/images/I/51z64EW0kSL._SX679_.jpg", "https://m.media-amazon.com/images/I/91tWE2qKo7L._SX679_.jpg", "https://m.media-amazon.com/images/I/81JLTvFo6kL._SX679_.jpg"],
+    reviews: [
+      "Providing good protection for my eyes. My eyelids are getting healed now. Due to continuous staring at the screen, my eyelids were swollen, itchy and painful. Now after 10 days of using these glasses, my eyelids and eyes both are in perfect condition. These glasses definitely block blue light.",
+      "I've been using computer rays protective glasses for a few weeks now, and I'm genuinely impressed with their performance. The glasses are lightweight and comfortable, making them easy to wear for extended periods. The lens effectively reduces glare and filters out harmful blue light, which has significantly eased my eye strain during long hours of screen time. Highly recommend them to anyone who spends a lot of time in front of screens.",
+      "Best quality & best price, packaging is also good 👍🏻 they also provide a tester."
+    ],
+    amazonLink: "https://amzn.to/3CFUVJ7"
+  }
+];
+    // Fetch product data from the API
+   const container = document.getElementById('product-list');
+
+products.forEach(product => {
+  const productDiv = document.createElement('div');
+  productDiv.classList.add('product-container');
+  
+  // Product Name
+  const productName = document.createElement('div');
+  productName.classList.add('product-name');
+  productName.textContent = product.name;
+  productDiv.appendChild(productName);
+
+  // Product Rating
+  const rating = document.createElement('div');
+  rating.classList.add('rating');
+  for (let i = 1; i <= 5; i++) {
+    const star = document.createElement('span');
+    star.classList.add('star');
+    star.classList.add(i <= product.rating ? 'filled' : 'empty');
+    star.innerHTML = '&#9733;';
+    rating.appendChild(star);
+  }
+  rating.innerHTML += ` (${product.rating}/5)`;
+  productDiv.appendChild(rating);
+
+  // Price Section
+  const priceSection = document.createElement('div');
+  priceSection.classList.add('price-section');
+  const mrp = document.createElement('span');
+  mrp.classList.add('mrp');
+  mrp.textContent = `₹${product.price}`;
+  priceSection.appendChild(mrp);
+  const discount = document.createElement('span');
+  discount.classList.add('discount');
+  discount.textContent = `${product.discount}% Off`;
+  priceSection.appendChild(discount);
+  productDiv.appendChild(priceSection);
+
+  // Image Carousel
+  const carousel = document.createElement('div');
+  carousel.classList.add('product-carousel');
+  const imagesContainer = document.createElement('div');
+  imagesContainer.classList.add('carousel-images');
+  
+  // Loop through the images and add them to the carousel
+  product.images.forEach(imageSrc => {
+    const img = document.createElement('img');
+    img.src = imageSrc;
+    img.classList.add('carousel-image');
+    imagesContainer.appendChild(img);
+  });
+
+  carousel.appendChild(imagesContainer);
+  productDiv.appendChild(carousel);
+
+  // Navigation Arrows
+  const leftArrow = document.createElement('button');
+  leftArrow.classList.add('arrow', 'left-arrow');
+  leftArrow.innerHTML = '&#8592;';
+  const rightArrow = document.createElement('button');
+  rightArrow.classList.add('arrow', 'right-arrow');
+  rightArrow.innerHTML = '&#8594;';
+  carousel.appendChild(leftArrow);
+  carousel.appendChild(rightArrow);
+
+  // Initialize current image index
+  let currentIndex = 0;
+
+  // Function to change the carousel image
+  function updateCarouselPosition() {
+    imagesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+  }
+
+  // Handle left arrow click
+  leftArrow.addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+    } else {
+      currentIndex = product.images.length - 1; // Loop back to last image
+    }
+    updateCarouselPosition();
+  });
+
+  // Handle right arrow click
+  rightArrow.addEventListener('click', () => {
+    if (currentIndex < product.images.length - 1) {
+      currentIndex++;
+    } else {
+      currentIndex = 0; // Loop back to first image
+    }
+    updateCarouselPosition();
+  });
+
+  // Reviews Section
+  const reviewsSection = document.createElement('div');
+  reviewsSection.classList.add('reviews');
+  reviewsSection.innerHTML = `
+    <strong>Reviews:</strong>
+    <p>${product.reviews[0]}</p>
+    <p>${product.reviews[1]}</p>
+    <p>${product.reviews[2]}</p>
+  `;
+  productDiv.appendChild(reviewsSection);
+
+  // Buy Now Button (Amazon link)
+  const buyNowBtn = document.createElement('a');
+  buyNowBtn.classList.add('buy-now-btn');
+  buyNowBtn.href = product.amazonLink; // Product Amazon link
+  buyNowBtn.target = '_blank'; // Open in a new tab
+  buyNowBtn.textContent = 'Buy Now';
+  productDiv.appendChild(buyNowBtn);
+
+  // Append to the container
+  container.appendChild(productDiv);
+});
+
+
+
+const others = [
+    {
+    name: "ISOTINE PLUS EYE DROP Jagat Pharma Isotine Plus for Serious Problems with goodness of Ayurvedic herbs -Amla, Chandan, Ashwagandha & palash |100% Ayurvedic |1 Box (10ml X 6 eye drops) -AYUSH Certified",
+    rating: 4,
+    price: 700,
+    discount: 29,
+    images: ["https://m.media-amazon.com/images/I/51rT1cq9HlL._SL1000_.jpg", "https://m.media-amazon.com/images/I/517JQ+pW1WL._SL1000_.jpg", "https://m.media-amazon.com/images/I/71kdbNvumTL._SL1200_.jpg"],
+    reviews: ["Iam using this Product since one week.. since then I've overcome on My Dry eyes, and itching Problems Highly Recommended..!!!", "Have tried a lot of imported drops as well for eye conform , focus , eye strain from computer work etc .. nothing compared to this .. This works like magic .. from the very first use .. have reordered", "I have received one item less … need to get this return"],
+    amazonLink: "https://amzn.to/4g86APD"
+  },
+    {
+    name: "Jiwadaya Healthcare Pvt. Ltd. Netraprabha Plus Ayurvedic Herbal Eye Drops for Dry Eyes, Conjunctivitis, Swelling, Irritation, Tearing, Refreshing, Strained Eyes etc - 10ml - Pack of 2",
+    rating: 4,
+    price: 160,
+    discount: 0,
+    images: ["https://m.media-amazon.com/images/I/61qMm-0DeWL._SL1000_.jpg", "https://m.media-amazon.com/images/I/613kAl-WAuL._SL1080_.jpg", "https://m.media-amazon.com/images/I/61Eqjacn-UL._SL1080_.jpg"],
+    reviews: ["Useful to clear eyes & feel fresh.", "It's sharp enough to clear eyes off the dirt or any irritation due to screen exposure or lack of sleep etc. Happy user", "This is a wonderful product by the company, have been using it since years , specially for those who work long hours in front of the computer. It soothes the pain due to strain from screens ."],
+    amazonLink: "https://amzn.to/3VbwSIx"
+  },
+    {
+    name: "Optrex Refreshing Eye Drops by Optrex",
+    rating: 4,
+    price: 2950,
+    discount: 35,
+    images: ["https://m.media-amazon.com/images/I/91WAkd6VCeS._SL1500_.jpg", "https://m.media-amazon.com/images/I/71pfaJ0Xc4L._SL1000_.jpg", "https://m.media-amazon.com/images/I/71Ho7WxvEqL._SL1000_.jpg"],
+      reviews: ["Bought for tired eyes. Does the job. Good value for money.", "These eye drops were easy to use .. I have always brought these .. however I brought some new fangled things from boots .. each drop in a separate plastic dropper … give me a brake absolutely no good more on my face than in my eyes lol.. these are easy to use lovely feeling and eye relief .. but hay ho a very small container … trus review nana Jxx", "I m thankful that I got a best eye drop as of now It’s best quality and sooo relaxing for dry and tired eyes most recommended"],
+     amazonLink: "https://amzn.to/4iktmpp"
+  }
+  ]
+  function displayProducts() {
+  const container = document.getElementById('other-list'); // Get the target div
+  others.forEach(product => {
+    // Create product HTML structure
+    const productDiv = document.createElement('div');
+    productDiv.classList.add('product');
+
+    // Add product details
+    productDiv.innerHTML = `
+      <h3>${product.name}</h3>
+      <div><strong>Rating:</strong> ${product.rating} stars</div>
+      <div><strong>Price:</strong> ₹${product.price}</div>
+      <div><strong>Discount:</strong> ${product.discount}%</div>
+      <div>
+        <strong>Images:</strong>
+        <div>
+          ${product.images.map(image => `<img src="${image}" alt="${product.name}" style="width: 100px; height: auto; margin-right: 10px;">`).join('')}
+        </div>
+      </div>
+      <div><strong>Reviews:</strong></div>
+      <ul>
+        ${product.reviews.map(review => `<li>${review}</li>`).join('')}
+      </ul>
+      <div><a href="${product.amazonLink}" target="_blank">View on Amazon</a></div>
+    `;
+
+    // Append the product div to the container
+    container.appendChild(productDiv);
+  });
+}
+
+// Call the function to display products
+displayProducts();
+
+function view(){
+     const box = document.querySelector('#other-list');
+     box.style.display = 'block';
+     const viewBox = document.getElementById('viewProducts');
+     viewBox.style.display = 'none';
+     const hideBox = document.getElementById('hideProduct');
+     hideBox.style.display = 'block';}
+function hide(){
+     const box = document.querySelector('#other-list');
+     box.style.display = 'none';
+     const viewBox = document.getElementById('viewProducts');
+     viewBox.style.display = 'block';
+     const hideBox = document.getElementById('hideProduct');
+     hideBox.style.display = 'none';
+};
+// Initialize a variable to keep track of the count
+let clickCount = 0;
+
+// Get all the elements with the class 'buy-now-btn'
+const buttons = document.querySelectorAll('.buy-now-btn');
+
+// Function to increment the global click count on the server
+function incrementClickCount() {
+    fetch('http://localhost:3000/increment-click', {  // Replace with your backend URL
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ increment: 1 })  // Sending the increment as data
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Display the updated click count on the page
+        console.log('Button clicked. Total clicks:', data.clickCount);
+        console.log('Button clicked. Total clicks:', data.clickCount);
+    })
+    .catch(error => console.error('Error updating click count:', error));
+}
+
+// Loop through each button and add a click event listener
+buttons.forEach(button => {
+    button.addEventListener('click', incrementClickCount);
+});
+
+// Fetch the initial click count from the server when the page loads
+window.onload = function() {
+    fetch('http://localhost:3000/get-click-count')
+        .then(response => response.json())
+        .then(data => {
+            // Display the current click count on the page
+            console.log('Button clicked. Total clicks:', data.clickCount);
+        })
+        .catch(error => console.error('Error fetching click count:', error));
+};
+
+  
+  </script>
+
+</body>
+</html>
